@@ -56,7 +56,7 @@
         return false;
       }
       $.ajax({
-        url: '<%=basePath%>/api/login.jsp',
+        url: '<%=basePath%>/api/login',
         type: 'POST',
         data: {
           id: id,
@@ -64,10 +64,10 @@
           rememberMe: $('#rememberMe').is(':checked')
         },
         success: function(response) {
-          console.log(response.success);
           if(response.success) {
-            localStorage.setItem('jwt_token', response.token);
-            window.location.href = '<%=basePath%>/index.jsp';
+            document.cookie = 'token=' + response.token + '; path=/;';
+            console.log(document.cookie);
+            window.location.href = '<%=basePath%>/home.jsp';
           } else {
             alert(response.message);
           }

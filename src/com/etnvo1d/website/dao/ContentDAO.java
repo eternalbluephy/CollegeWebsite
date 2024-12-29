@@ -73,4 +73,17 @@ public class ContentDAO {
         }
         return 0;
     }
+
+    public static void remove(int id) {
+        Connection con = ConnectionPool.getInstance().getConnection();
+        try {
+            PreparedStatement ps = con.prepareStatement("delete from content where id = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+    }
 }

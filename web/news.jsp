@@ -20,7 +20,7 @@
 
   <%
     int newsPage = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
-    int totalPage = ArticleDAO.countArticlePages(0);
+    int totalPage = (int) Math.ceil(ArticleDAO.countArticles(0) / 12.0);
   %>
 </head>
 

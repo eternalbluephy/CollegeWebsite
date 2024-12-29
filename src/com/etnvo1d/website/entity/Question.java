@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class Question {
     private int id;
     private String title;
+    private String description;
     private String authorId;
     private String authorName;
     private LocalDate time;
@@ -49,5 +50,13 @@ public class Question {
 
     public void setTime(LocalDate time) {
         this.time = time;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -34,9 +34,8 @@
                 }
             }
         }
-        int contentId = ContentDAO.upsert(id.equals("0") ? null : Integer.parseInt(id), content);
-        if (id.equals("0")) {
-            System.out.println(contentId);
+        if (id.equals("0")) { // 新增文章
+            int contentId = ContentDAO.upsert(id.equals("0") ? null : Integer.parseInt(id), content);
             ArticleDAO.upsert(
                 null, title, cover.trim(), contentId, Integer.parseInt(type));
         }

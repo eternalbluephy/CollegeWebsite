@@ -39,11 +39,11 @@
             <%
                 for(Article article : newsList) {
             %>
-            <div class="article-item padding-y-sm border-bottom">
-                <a href="${pageContext.request.contextPath}/article.jsp?id=<%=article.getId()%>" class="text-truncate">
+            <div class="article-item padding-y-sm border-bottom article-area">
+                <a class="text-truncate text-nowrap d-block" href="${pageContext.request.contextPath}/article.jsp?id=<%=article.getId()%>">
                     <%= article.getTitle() %>
                 </a>
-                <span class="text-secondary margin-l text-nowrap">
+                <span class="text-secondary margin-l text-nowrap d-block">
                     <%= DateUtil.dateToString(article.getTime()) %>
                 </span>
             </div>
@@ -78,7 +78,10 @@
 
     <div class="margin-t-lg list-lg">
         <div class="list-item-lg mxw">
-            <h2>招聘信息</h2>
+            <div class="m-row spacebetween">
+                <h2>招生就业</h2>
+                <a class="text-weak" href="articles.jsp?type=3">查看全部</a>
+            </div>
             <div class="m-row margin-t bg-white padding-y padding-x" style="align-items: flex-start; height: 250px;">
                 <div class="mxh mxw">
                     <%
@@ -99,7 +102,10 @@
             </div>
         </div>
         <div class="list-item-lg mxw">
-            <h2>在线咨询</h2>
+            <div class="m-row spacebetween">
+                <h2>在线咨询</h2>
+                <a class="text-weak" href="articles.jsp?type=3">查看全部</a>
+            </div>
             <div class="m-row margin-t bg-white padding-y padding-x" style="align-items: flex-start; height: 250px;">
                 <div class="mxh mxw">
                     <%
@@ -134,6 +140,30 @@
     }
 
     .article-area {
-        max-width: 350px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .article-area a {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .article-area .text-secondary {
+        flex-shrink: 0;
+        margin-left: 1rem;
+    }
+
+    @media(min-width: 992px) {
+        .article-area {
+            width: auto;
+            max-width: 520px;
+        }
     }
 </style>

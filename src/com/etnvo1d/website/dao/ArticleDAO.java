@@ -58,6 +58,7 @@ public class ArticleDAO {
                 article.setCover(rs.getString("cover"));
                 article.setContentId(rs.getInt("content_id"));
                 article.setType(type);
+                article.setContent(ContentDAO.query(article.getContentId()));
                 articleList.add(article);
             }
         } catch (SQLException e) {
@@ -68,12 +69,12 @@ public class ArticleDAO {
         return articleList;
     }
 
-    public static int countArticlePages(int type) {
+    public static int countArticles(int type) {
         Connection con = ConnectionPool.getInstance().getConnection();
         int count = 0;
         try {
             PreparedStatement ps = con.prepareStatement(
-                "select ceil(count(*)/12.0) as pages from articles where type=?"
+                "select count(*) as pages from articles where type=?"
             );
             ps.setInt(1, type);
             ResultSet rs = ps.executeQuery();
@@ -116,33 +117,60 @@ public class ArticleDAO {
         return null;
     }
 
-    public static void upsert(Integer id, String title, String cover, int content_id, int type) {
+    public static void insert(String title, String cover, int content_id, int type) {
         Connection con = ConnectionPool.getInstance().getConnection();
         try {
-            if (id == null || id == 0) {
-                PreparedStatement ps = con.prepareStatement(
-                    "insert into articles (title, cover, content_id, type, time, views) values (?, ?, ?, ?, now(), 0)"
-                );
-                ps.setString(1, title);
-                ps.setString(2, cover);
-                ps.setInt(3, content_id);
-                ps.setInt(4, type);
-                ps.executeUpdate();
-            } else {
-                PreparedStatement ps = con.prepareStatement(
-                    "update articles set title=?, cover=?, content_id=?, type=? where id=?"
-                );
-                ps.setString(1, title);
-                ps.setString(2, cover);
-                ps.setInt(3, content_id);
-                ps.setInt(4, type);
-                ps.setInt(5, id);
-                ps.executeUpdate();
-            }
+            PreparedStatement ps = con.prepareStatement("insert into articles (title, cover, content_id, type, time, views) values (?, ?, ?, ?, now(), 0)"
+            );
+            ps.setString(1, title);
+            ps.setString(2, cover);
+            ps.setInt(3, content_id);
+            ps.setInt(4, type);
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
+        }
+    }
+
+    public static void update(int id, String title, int content_id, int type) {
+        Connection con = ConnectionPool.getInstance().getConnection();
+        try {
+            PreparedStatement ps = con.prepareStatement("update articles set title=?, content_id=?, type=? where id=?");
+            ps.setString(1, title);
+            ps.setInt(2, content_id);
+            ps.setInt(3, type);
+            ps.setInt(4, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void update(int id, String title, String cover, int content_id, int type) {
+        Connection con = ConnectionPool.getInstance().getConnection();
+        try {
+            PreparedStatement ps = con.prepareStatement("update articles set title=?, cover=?, content_id=?, type=? where id=?");
+            ps.setString(1, title);
+            ps.setString(2, cover);
+            ps.setInt(3, content_id);
+            ps.setInt(4, type);
+            ps.setInt(5, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void remove(int id) {
+        Connection con = ConnectionPool.getInstance().getConnection();
+        try {
+            PreparedStatement ps = con.prepareStatement("delete from articles where id=?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

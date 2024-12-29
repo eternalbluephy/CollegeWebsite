@@ -60,7 +60,12 @@
     <div class="form-group row mb-3">
       <label for="cover" class="col-sm-1 col-form-label">封面图片</label>
       <div class="col-sm-3">
-        <input type="file" class="form-control" id="cover" name="cover" accept="image/*">
+        <%
+          if (article != null) {
+        %>
+        <img src="<%=article.getCover()%>" />
+        <% } %>
+        <input type="file" class="form-control <%=article == null ? "" : "margin-t"%>" id="cover" name="cover" accept="image/*">
       </div>
     </div>
   </form>
@@ -183,9 +188,15 @@
             </button>
           </div>
         </div>
-        <div id="editor"></div>
+        <div id="editor">
+          <%
+            if (article != null) {
+          %>
+          <%=article.getContent()%>
+          <% } %>
+        </div>
       </div>
-      <button class="btn btn-primary" onclick="addActivity(<%=id%>, <%=type%>)">提交</button>
+      <button class="btn btn-primary" onclick="addActivity(<%=id%>, <%=type%>, <%=type==0 && article==null%>)">提交</button>
     </div>
   </div>
 </div>
@@ -234,31 +245,37 @@
     });
   };
 
-  function uploadCover() {
-    if (cover) {
-      var form = new FormData();
-      form.append("editorImage", $('#cover')[0].files[0]);
-      var xhr = new XMLHttpRequest();
-      xhr.open("post", "/api/uploadImg.jsp", false);
-      xhr.send(form);
-      return xhr.responseText;
-    }
+  function uploadCover(cover) {
+    const form = new FormData();
+    form.append("editorImage", $('#cover')[0].files[0]);
+    const xhr = new XMLHttpRequest();
+    xhr.open("post", "/api/uploadImg.jsp", false);
+    xhr.send(form);
+    return xhr.responseText;
   }
 
-  function addActivity(id, type) {
+  function addActivity(id, type, needCover) {
+    // 标题
     const title = $("#title").val();
     if (!title) {
       alert("标题不能为空");
       return;
     }
+    // 封面
     const cover = $("#cover").val();
     let coverUrl = "";
-    if (cover) coverUrl = uploadCover();
-    else if (type === 0) {
-      alert("新闻必须提供封面");
+    if (cover) coverUrl = uploadCover(cover);
+    else if (needCover) {
+      alert("封面不能为空");
+      return;
     }
+    // 内容
     const content = $("#editor").html();
-    $("#content").val(content);
+    if (!content) {
+      alert("内容不能为空");
+      return;
+    }
+    // 合在一起
     const form = new FormData();
     form.append("id", id);
     form.append("title", title);
@@ -267,17 +284,17 @@
     form.append("type", type);
     $.ajax({
       type: "post",
-      url: "/api/postArticle.jsp",
+      url: "/api/postArticle",
       data: form,
       async: false,
-      contentType: false,
+      contentType: false, // multipart
       processData: false,
       success: function (data) {
         if (data.success) {
           window.location.href = "manage.jsp";
           alert("提交成功");
         } else {
-          console.log("提交失败");
+          alert(data.message)
         }
       }
     });

@@ -212,6 +212,10 @@ a {
     margin-top: 48px;
 }
 
+.margin-b {
+    margin-bottom: 12px;
+}
+
 .margin-b-lg {
     margin-bottom: 24px;
 }
@@ -292,7 +296,7 @@ a {
 }
 
 .list-item-lg {
-    margin-bottom: 12px;
+    margin-bottom: 24px;
 }
 
 @media (min-width: 992px) {
@@ -302,10 +306,14 @@ a {
 
     .list-item-lg {
         margin-bottom: 0;
-        margin-right: 12px;
+        margin-right: 24px;
     }
 
     .list-item-lg:last-child {
         margin-right: 0;
     }
+}
+
+.a.active {
+    color: #fff;
 }

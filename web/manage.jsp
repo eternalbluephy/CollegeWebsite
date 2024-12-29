@@ -26,12 +26,14 @@
     out.println("<script>alert('权限不足')</script>");
     return;
   }
+  int type = request.getParameter("type") != null ? Integer.parseInt(request.getParameter("type")) : 0;
+  int curPage = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
 %>
 <div class="container margin-t-lg">
   <div class="row">
     <div class="col-md-3">
       <div class="list-group">
-        <a href="manage.jsp?type=0" class="list-group-item list-group-item-action active">新闻动态</a>
+        <a href="manage.jsp?type=0" class="list-group-item list-group-item-action">新闻动态</a>
         <a href="manage.jsp?type=1" class="list-group-item list-group-item-action">学院概况</a>
         <a href="manage.jsp?type=2" class="list-group-item list-group-item-action">学科建设</a>
         <a href="manage.jsp?type=3" class="list-group-item list-group-item-action">招生就业</a>
@@ -39,18 +41,16 @@
     </div>
     <div class="col-md-9 bg-white">
       <div class="d-flex justify-content-end">
-        <a href="${pageContext.request.contextPath}/edit.jsp">
+        <a href="edit.jsp?type=<%=type%>">
           <button class="btn-primary btn margin-y">新增</button>
         </a>
       </div>
       <%
-        int type = request.getParameter("type") != null ? Integer.parseInt(request.getParameter("type")) : 0;
-        int curPage = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
         List<Article> articles = ArticleDAO.queryArticlesByPage(curPage, type);
         if (articles.isEmpty()) {
           out.println("<p class='text-center mt-4'>暂无数据</p>");
         } else {
-        int totalPages = ArticleDAO.countArticlePages(type);
+        int totalPages = (int) Math.ceil(ArticleDAO.countArticles(type) / 12.0);
       %>
       <table class="table">
         <thead>
@@ -67,7 +67,7 @@
             <td><%= article.getTime() %></td>
             <td>
               <button class="btn btn-primary btn-sm" onclick="window.location.href='edit.jsp?id=<%= article.getId() %>'">编辑</button>
-              <button class="btn btn-danger btn-sm" onclick="if(confirm('确定删除?')) window.location.href='delete.jsp?id=<%= article.getId() %>'">删除</button>
+              <button class="btn btn-danger btn-sm" onclick="if(confirm('确定删除?')) submitDelete(<%=article.getId()%>)">删除</button>
             </td>
           </tr>
           <% } %>
@@ -105,3 +105,21 @@
     color: #fff !important;
   }
 </style>
+
+<script>
+  function submitDelete(id) {
+    $.ajax({
+      type: "post",
+      url: "/api/removeArticle",
+      data: { id: id },
+      success: function (data) {
+        if (data.success) {
+          window.location.reload();
+          alert("删除成功");
+        } else {
+          alert(data.message);
+        }
+      }
+    });
+  }
+</script>

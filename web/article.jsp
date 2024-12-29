@@ -42,7 +42,7 @@
             <span class="text-weak">发布时间：<%=DateUtil.dateToString(article.getTime())%></span>
             <span class="text-weak">浏览次数：<%=article.getViews()%></span>
         </div>
-        <div class="w-75">
+        <div class="w-75" style="overflow: hidden;">
             <%=article.getContent()%>
         </div>
     </div>

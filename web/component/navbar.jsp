@@ -1,7 +1,6 @@
-<%@include file="LoginControl.jsp"%>
-
+<%@include file="loginControl.jsp"%>
 <%
-    boolean isLogined = session.getAttribute("isLogined") != null && (boolean) session.getAttribute("isLogined");
+    boolean login = (boolean) session.getAttribute("login");
 %>
 <nav class="navbar navbar-expand-lg bg-white split-b border-bottom">
     <div class="container">
@@ -12,25 +11,24 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button"
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="articles.jsp?type=1" role="button"
                                                  data-bs-toggle="dropdown">学院概况</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">学院简介</a></li>
-                        <li><a class="dropdown-item" href="#">机构设置</a></li>
-                        <li><a class="dropdown-item" href="#">师资队伍</a></li>
+                        <li><a class="dropdown-item" href="article.jsp?id=20">学院简介</a></li>
+                        <li><a class="dropdown-item" href="article.jsp?id=21">机构设置</a></li>
+                        <li><a class="dropdown-item" href="article.jsp?id=22">师资队伍</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/news.jsp">新闻动态</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">学科建设</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">招生就业</a></li>
+                <li class="nav-item"><a class="nav-link" href="news.jsp">新闻动态</a></li>
+                <li class="nav-item"><a class="nav-link" href="articles.jsp?type=2">学科建设</a></li>
+                <li class="nav-item"><a class="nav-link" href="articles.jsp?type=3">招生就业</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">公共服务</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">资源下载</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">在线咨询</a></li>
             </ul>
 
-            <!-- 用户状态区域 -->
             <div class="d-lg-none border-top mt-3 pt-3">
-                <% if (!isLogined) { %>
+                <% if (!login) { %>
                 <a href="${pageContext.request.contextPath}/login.jsp">
                     <button class="btn btn-primary w-100">登录</button>
                 </a>
@@ -51,9 +49,8 @@
                 <% } %>
             </div>
 
-            <!-- 桌面端用户状态区域 -->
             <div class="d-none d-lg-flex navbar-nav">
-                <% if (!isLogined) { %>
+                <% if (!login) { %>
                 <a href="${pageContext.request.contextPath}/login.jsp">
                     <button class="btn btn-primary">登录</button>
                 </a>
@@ -80,7 +77,7 @@
 
 <script>
     function quit() {
-        localStorage.removeItem("jwt_token");
-        window.location.href = "/";
+        document.cookie = "token=;";
+        window.location.href = "home.jsp";
     }
 </script>
