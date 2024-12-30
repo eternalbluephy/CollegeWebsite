@@ -30,6 +30,7 @@
             out.println("<script>alert('文章不存在')</script>");
             return;
         }
+        ArticleDAO.addView(id);
     %>
 </head>
 

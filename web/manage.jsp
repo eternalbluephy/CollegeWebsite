@@ -33,10 +33,16 @@
   <div class="row">
     <div class="col-md-3">
       <div class="list-group">
-        <a href="manage.jsp?type=0" class="list-group-item list-group-item-action">新闻动态</a>
-        <a href="manage.jsp?type=1" class="list-group-item list-group-item-action">学院概况</a>
-        <a href="manage.jsp?type=2" class="list-group-item list-group-item-action">学科建设</a>
-        <a href="manage.jsp?type=3" class="list-group-item list-group-item-action">招生就业</a>
+        <a href="manage.jsp?type=0"
+           class="list-group-item list-group-item-action <%=type==0?"active":""%>">新闻动态</a>
+        <a href="manage.jsp?type=1"
+           class="list-group-item list-group-item-action <%=type==1?"active":""%>">学院概况</a>
+        <a href="manage.jsp?type=2"
+           class="list-group-item list-group-item-action <%=type==2?"active":""%>">学科建设</a>
+        <a href="manage.jsp?type=3"
+           class="list-group-item list-group-item-action <%=type==3?"active":""%>">招生就业</a>
+        <a href="manageResources.jsp" class="list-group-item list-group-item-action">资源下载</a>
+        <a href="manageUser.jsp" class="list-group-item list-group-item-action">用户管理</a>
       </div>
     </div>
     <div class="col-md-9 bg-white">
@@ -50,7 +56,7 @@
         if (articles.isEmpty()) {
           out.println("<p class='text-center mt-4'>暂无数据</p>");
         } else {
-        int totalPages = (int) Math.ceil(ArticleDAO.countArticles(type) / 12.0);
+          int totalPages = (int) Math.ceil(ArticleDAO.countArticles(type) / 12.0);
       %>
       <table class="table">
         <thead>

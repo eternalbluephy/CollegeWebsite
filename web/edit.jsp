@@ -245,7 +245,7 @@
     });
   };
 
-  function uploadCover(cover) {
+  function uploadCover() {
     const form = new FormData();
     form.append("editorImage", $('#cover')[0].files[0]);
     const xhr = new XMLHttpRequest();
@@ -264,7 +264,7 @@
     // 封面
     const cover = $("#cover").val();
     let coverUrl = "";
-    if (cover) coverUrl = uploadCover(cover);
+    if (cover) coverUrl = uploadCover();
     else if (needCover) {
       alert("封面不能为空");
       return;

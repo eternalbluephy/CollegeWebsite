@@ -64,6 +64,31 @@
       </div>
     <% } %>
   </div>
+  <% if (totalCount > 0) { %>
+  <nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item <%= curPage <= 1 ? "disabled" : "" %>">
+        <a class="page-link" href="articles.jsp?page=<%= curPage-1 %>" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <% for(int i = 1; i <= totalPages; i++) { %>
+      <li class="page-item <%= i == curPage ? "active" : "" %>">
+        <span class="page-link text-white"><%= i %></span>
+      </li>
+      <% } %>
+      <li class="page-item <%= curPage >= totalPages ? "disabled" : "" %>">
+        <a class="page-link" href="articles.jsp?page=<%= curPage+1 %>" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <% } else { %>
+  <div class="margin-t-elg m-row v-center" style="color: #666;">
+    <h5>暂无内容</h5>
+  </div>
+  <% } %>
 </div>
 
 <script type="text/javascript" src="<%=basePath%>/bootstrap/js/bootstrap.bundle.js"></script>

@@ -27,7 +27,7 @@
 
 <body>
 <%@include file="component/navbar.jsp"%>
-<div class="container">
+<div class="container pb-4">
     <div style="height: 12px"></div>
     <%@include file="component/carousel.html"%>
     <div class="m-row margin-t-lg spacebetween">

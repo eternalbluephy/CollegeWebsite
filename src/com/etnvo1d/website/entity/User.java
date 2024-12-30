@@ -10,6 +10,7 @@ public class User {
     private String name;
     private int type;
     private String password;
+    private double money;
 
     public User() {}
 
@@ -43,5 +44,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
     }
 }

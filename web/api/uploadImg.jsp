@@ -18,10 +18,6 @@
     DiskFileItemFactory.Builder builder = new DiskFileItemFactory.Builder();
     DiskFileItemFactory diskFileItemFactory = builder.get();
     JakartaServletFileUpload upload = new JakartaServletFileUpload(diskFileItemFactory);
-
-    // Set upload parameters
-    upload.setSizeMax(5 * 1024 * 1024); // 5MB max
-
     List<FileItem> items = upload.parseRequest(request);
     
     for (FileItem item : items) {

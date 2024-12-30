@@ -44,7 +44,7 @@ public class ArticleDAO {
         List<Article> articleList = new ArrayList<>();
         try {
             PreparedStatement ps = con.prepareStatement(
-                "select id, title, time, views, cover, content_id from articles where type=? order by time desc limit ?, 12"
+                "select id, title, time, views, cover, content_id from articles where type=? order by id desc limit ?, 12"
             );
             ps.setInt(1, type);
             ps.setInt(2, (page - 1) * 12);
@@ -145,6 +145,8 @@ public class ArticleDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
         }
     }
 
@@ -160,6 +162,8 @@ public class ArticleDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
         }
     }
 
@@ -171,6 +175,21 @@ public class ArticleDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+    }
+
+    public static void addView(int id) {
+        Connection con = ConnectionPool.getInstance().getConnection();
+        try {
+            PreparedStatement ps = con.prepareStatement("update articles set views=views+1 where id=?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
         }
     }
 }
